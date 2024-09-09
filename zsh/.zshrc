@@ -107,7 +107,7 @@ alias ofload='cd ~/ofload/ofload_site'
 eval "$(fzf --zsh)" # Only from fzf version 0.48.0. Do manual:
 #source /usr/share/doc/fzf/examples/key-bindings.zsh
 #source /usr/share/doc/fzf/examples/completion.zsh
-
+source <(kubectl completion zsh)
 eval "$(zoxide init --cmd cd zsh)"
 
 choose_aws_profile() {
@@ -158,5 +158,7 @@ _redocly_yargs_completions()
 compdef _redocly_yargs_completions redocly
 ###-end-redocly-completions-###
 
+
+export DOCKER_GATEWAY_HOST="`docker network inspect app-network -f '{{ (index .IPAM.Config 0).Gateway }}'`"
 
 
