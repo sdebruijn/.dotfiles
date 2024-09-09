@@ -7,9 +7,6 @@ help: ## This help dialog.
 all: ## Install all dotfiles
 	stow --verbose --target=${HOME} --restow */
 
-test: ## Test stow command 
-	stow --verbose --target=${HOME} --restow test/
-	
 delete: ## Uninstall all dotfiles
 	stow --verbose --target=${HOME} --delete */
 
