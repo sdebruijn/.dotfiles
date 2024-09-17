@@ -100,7 +100,12 @@ alias vim="nvim"
 alias view="nvim -R"
 alias vimdiff="nvim -d"
 
-alias ofload='cd ~/ofload/ofload_site'
+alias dc='docker compose'
+alias dcw='docker compose watch'
+
+alias gs='git status'
+alias ga='git add'
+alias gc='git commit -m'
 
 # Shell integrations
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
