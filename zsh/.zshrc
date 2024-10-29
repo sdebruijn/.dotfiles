@@ -166,4 +166,10 @@ compdef _redocly_yargs_completions redocly
 
 export DOCKER_GATEWAY_HOST="`docker network inspect app-network -f '{{ (index .IPAM.Config 0).Gateway }}'`"
 
+alias laravel='~/.config/composer/vendor/bin/laravel'
+alias sail='[ -f sail ] && bash sail || bash vendor/bin/sail'
+alias docker-stop-all='docker ps --format "{{.ID}} {{.Names}}" | while read -r id name; do echo "Stopping $name..."; docker stop $id > /dev/null; done'
+
+
+
 
