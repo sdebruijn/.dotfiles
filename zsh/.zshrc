@@ -3,6 +3,8 @@ EDITOR="$VISUAL"
 declare -A ZINIT
 ZINIT[NO_ALIASES]=1
 
+export PATH="$HOME/.local/bin/:$PATH"
+
 # Download Zinit, if it's not there yet
 ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
 [ ! -d $ZINIT_HOME ] && mkdir -p "$(dirname $ZINIT_HOME)"
@@ -105,7 +107,10 @@ alias dcw='docker compose watch'
 
 alias gs='git status'
 alias ga='git add'
-alias gc='git commit -m'
+alias gc='git commit'
+
+alias pbcopy="xclip -selection c"
+alias pbpaste="xclip -selectoin c -o"
 
 # Shell integrations
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
@@ -133,7 +138,7 @@ choose_aws_profile() {
 alias awsprofile='choose_aws_profile'
 
 
-alias fixperm='sudo chown $(id -nu):www-data -R ./storage && sudo chmod -R g+wr ./storage'
+alias fixperm='sudo chown $(id -nu):www-data -R ./storage ./bootstrap/cache && sudo chmod -R g+wr ./storage ./bootstrap/cache'
 
 fixperms () {
     dir="${1:-$(pwd)}"
@@ -141,6 +146,35 @@ fixperms () {
     sudo chgrp -R dockersijmen $dir
     sudo chmod -R g+w $dir
     sudo chmod -R g+r $dir
+}
+
+pg_dump_fzf() {
+  local service
+  service=$(
+    grep -oP '^\[\K[^]]+' ~/.pg_service.conf \
+    | fzf \
+    --height=20% \
+    --min-height=12 \
+    --margin=5%,2%,2%,5% \
+    --border=rounded \
+    --info=inline \
+    --header="Select a service: " \
+  )
+
+  if [[ -n "$service" ]]; then
+    pg_dump "service=$service" \
+      --data-only \
+      --column-inserts \
+      --exclude-table=migrations \
+      --exclude-table=ledgers \
+      --exclude-table=msg_directions \
+      --exclude-table=api_clients \
+      --exclude-table-data='*_id_seq' \
+      > "${service}-db-$(date +%Y-%m-%d-%H%M).sql"
+    echo "Dump saved to ${service}-db-$(date +%Y-%m-%d-%H%M).sql"
+  else
+    echo "No service selected."
+  fi
 }
 
 #compdef redocly
@@ -170,6 +204,15 @@ alias laravel='~/.config/composer/vendor/bin/laravel'
 alias sail='[ -f sail ] && bash sail || bash vendor/bin/sail'
 alias docker-stop-all='docker ps --format "{{.ID}} {{.Names}}" | while read -r id name; do echo "Stopping $name..."; docker stop $id > /dev/null; done'
 
+alias pint='php ./vendor/bin/pint -v'
+alias pitn='pint'
+alias phpstan='./vendor/bin/phpstan analyse'
+alias stan='phpstan'
+alias check='pint & phpstan & wait'
+alias diff='diff --color=auto'
 
+source ~/.zsh_tokens
 
-
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
