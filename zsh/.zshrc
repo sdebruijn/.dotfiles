@@ -1,218 +1,95 @@
-VISUAL=nvim
-EDITOR="$VISUAL"
-declare -A ZINIT
-ZINIT[NO_ALIASES]=1
 
-export PATH="$HOME/.local/bin/:$PATH"
+# +---------+
+# | ALIASES |
+# +---------+
+source "$ZDOTDIR/aliases"
 
-# Download Zinit, if it's not there yet
-ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
-[ ! -d $ZINIT_HOME ] && mkdir -p "$(dirname $ZINIT_HOME)"
-[ ! -d $ZINIT_HOME/.git ] && git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
-source "${ZINIT_HOME}/zinit.zsh"
+# +---------+
+# | SCRIPTS |
+# +---------+
 
-# Install nerdfont
+source $ZDOTDIR/scripts.zsh
+
+# +------------+
+# | NAVIGATION |
+# +------------+
+
+setopt AUTO_PUSHD           # Push the old directory onto the stack on cd.
+setopt PUSHD_IGNORE_DUPS    # Do not store duplicates in the stack.
+setopt PUSHD_SILENT         # Do not print the directory stack after pushd or popd.
+
+# +---------+
+# | HISTORY |
+# +---------+
+
+setopt SHARE_HISTORY             # Share history between all sessions.
+setopt HIST_EXPIRE_DUPS_FIRST    # Expire a duplicate event first when trimming history.
+setopt HIST_IGNORE_DUPS          # Do not record an event that was just recorded again.
+setopt HIST_IGNORE_ALL_DUPS      # Delete an old recorded event if a new event is a duplicate.
+setopt HIST_FIND_NO_DUPS         # Do not display a previously found event.
+setopt HIST_IGNORE_SPACE         # Do not record an event starting with a space.
+setopt HIST_SAVE_NO_DUPS         # Do not write a duplicate event to the history file.
+setopt HIST_VERIFY               # Do not execute immediately upon history expansion.
+
+
+# +------------+
+# | COMPLETION |
+# +------------+
+
+source $ZDOTDIR/completion.zsh
+source $DOTFILES/zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
+
+# +-------+
+# | FONTS |
+# +-------+
 [ ! -d "$HOME/.fonts" ] && mkdir -p "$HOME/.fonts"
 if [ ! -f "$HOME/.fonts/JetBrainsMonoNerdFont-Regular.ttf" ]; then
-	FONT_URL="https://github.com/ryanoasis/nerd-fonts/releases/latest/download/JetBrainsMono.tar.xz"
-	FONT_ARCHIVE="JetBrainsMono.tar.xz"
+    FONT_URL="https://github.com/ryanoasis/nerd-fonts/releases/latest/download/JetBrainsMono.tar.xz"
+    FONT_ARCHIVE="JetBrainsMono.tar.xz"
 
-	curl -fLo "$HOME/.fonts/$FONT_ARCHIVE" "$FONT_URL"
-	tar -xf "$HOME/.fonts/$FONT_ARCHIVE" -C "$HOME/.fonts/"
-	rm "$HOME/.fonts/$FONT_ARCHIVE"
-	echo "JetBrains Mono Nerd Font has been installed successfully."
-	fc-cache -fv "$HOME/.fonts"
+    echo "JetBrains Mono Nerd Font not found. Downloading..."
+    curl -fLo "$HOME/.fonts/$FONT_ARCHIVE" "$FONT_URL"
+    tar -xf "$HOME/.fonts/$FONT_ARCHIVE" -C "$HOME/.fonts/"
+    rm "$HOME/.fonts/$FONT_ARCHIVE"
+    echo "JetBrains Mono Nerd Font has been installed successfully."
+    fc-cache -fv "$HOME/.fonts"
 fi
 
-# Install ohmyposh if not installed
-if [ ! -f "/usr/local/bin/oh-my-posh" ]; then
-	echo "Asking for permission to download ohmyposh"
-	curl -s https://ohmyposh.dev/install.sh | sudo bash -s
-fi
+# +-----+
+# | FZF |
+# +-----+
 
-eval "$(oh-my-posh init zsh --config $HOME/.config/ohmyposh/zen.toml)"
+#if [ $(command -v "fzf") ]; then
+    #source $ZDOTDIR/fzf.zsh
+#fi
 
-# Add in zsh plugins
-zinit light Aloxaf/fzf-tab
-zinit light zsh-users/zsh-syntax-highlighting
-zinit light zsh-users/zsh-completions
-zinit light zsh-users/zsh-autosuggestions
+# +--------------+
+# | KEY BINDINGS |
+# +--------------+
 
-# Add in snippets
-zinit snippet OMZP::git
-#zinit snippet OMZP::docker
-#zinit snippet OMZP::docker-compose
-#zinit snippet OMZP::sudo
-#zinit snippet OMZP::aws
-#zinit snippet OMZP::kubectl
-#zinit snippet OMZP::kubectx
-#zinit snippet OMZP::command-not-found
-
-#zinit cdreplay -q
-
-# Load completions
-autoload -Uz compinit && compinit
-zinit cdreplay -q
-
-
-# Keybindings emacs mode
 bindkey -e
 bindkey '^p' history-search-backward
 bindkey '^n' history-search-forward
 
-# History
-HISTSIZE=5000
-HISTFILE=~/.zsh_history
-SAVEHIST=$HISTSIZE
-HISTDUP=erase
-setopt appendhistory
-setopt sharehistory
-setopt hist_ignore_space
-setopt hist_ignore_all_dups
-setopt hist_save_no_dups
-setopt hist_ignore_dups
-setopt hist_find_no_dups
 
-# Autocomplete colors
-#
-# Based on the oh-my-zsh default `LSCOLORS`. Converted with the help of the
-# Geoff Greer's lscolors project.
-# See: https://geoff.greer.fm/lscolors/
-_ls_colors="di=1;36:ln=35:so=32:pi=33:ex=31:bd=34;46:cd=34;43:su=30;41:sg=30;46:tw=30;42:ow=30;43"
+# +---------------------+
+# | SYNTAX HIGHLIGHTING |
+# +---------------------+
 
-# Completion styling
-zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
-zstyle ':completion:*:default' list-colors "${(s.:.)_ls_colors}"
-zstyle ':completion:*' menu no
-zstyle ':fzf-tab:complete:cd:*' fzf-preview 'ls --color $realpath'
-zstyle ':fzf-tab:complete:__zoxide_z:*' fzf-preview 'ls --color $realpath'
+source $DOTFILES/zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
-# Aliases
-alias ls='ls --color=auto'
-alias dir='dir --color=auto'
-alias vdir='vdir --color=auto'
-alias grep='grep --color=auto'
-alias fgrep='fgrep --color=auto'
-alias egrep='egrep --color=auto'
-alias ll='ls -alF'
-alias la='ls -A'
-alias l='ls -CF'
-alias vi="nvim"
-alias vim="nvim"
-alias view="nvim -R"
-alias vimdiff="nvim -d"
-
-alias dc='docker compose'
-alias dcw='docker compose watch'
-
-alias gs='git status'
-alias ga='git add'
-alias gc='git commit'
-
-alias pbcopy="xclip -selection c"
-alias pbpaste="xclip -selectoin c -o"
-
-# Shell integrations
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-eval "$(fzf --zsh)" # Only from fzf version 0.48.0. Do manual:
-#source /usr/share/doc/fzf/examples/key-bindings.zsh
-#source /usr/share/doc/fzf/examples/completion.zsh
-source <(kubectl completion zsh)
+
+# +--------------+
+# | END OF ZSHRC |
+# +--------------+
+
+eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+
+# Better cd
 eval "$(zoxide init --cmd cd zsh)"
 
-choose_aws_profile() {
-  # Extract profile names from the AWS config file
-  selected_profile=$(
-    sed -n "s/\[profile \(.*\)\]/\1/gp" ~/.aws/config \
-    | fzf \
-    --height=20% \
-    --min-height=12 \
-    --margin=5%,2%,2%,5% \
-    --border=rounded \
-    --info=inline \
-    --header="Choose AWS profile" \
-  )
-  export AWS_PROFILE=$selected_profile
-  echo "Set AWS profile to '$selected_profile'"
-}
-alias awsprofile='choose_aws_profile'
+# Better prompt
+eval "$(starship init zsh)"
 
 
-alias fixperm='sudo chown $(id -nu):www-data -R ./storage ./bootstrap/cache && sudo chmod -R g+wr ./storage ./bootstrap/cache'
-
-fixperms () {
-    dir="${1:-$(pwd)}"
-    sudo chown -R $(whoami) $dir
-    sudo chgrp -R dockersijmen $dir
-    sudo chmod -R g+w $dir
-    sudo chmod -R g+r $dir
-}
-
-pg_dump_fzf() {
-  local service
-  service=$(
-    grep -oP '^\[\K[^]]+' ~/.pg_service.conf \
-    | fzf \
-    --height=20% \
-    --min-height=12 \
-    --margin=5%,2%,2%,5% \
-    --border=rounded \
-    --info=inline \
-    --header="Select a service: " \
-  )
-
-  if [[ -n "$service" ]]; then
-    pg_dump "service=$service" \
-      --data-only \
-      --column-inserts \
-      --exclude-table=migrations \
-      --exclude-table=ledgers \
-      --exclude-table=msg_directions \
-      --exclude-table=api_clients \
-      --exclude-table-data='*_id_seq' \
-      > "${service}-db-$(date +%Y-%m-%d-%H%M).sql"
-    echo "Dump saved to ${service}-db-$(date +%Y-%m-%d-%H%M).sql"
-  else
-    echo "No service selected."
-  fi
-}
-
-#compdef redocly
-###-begin-redocly-completions-###
-#
-# yargs command completion script
-#
-# Installation: redocly completion >> ~/.zshrc
-#    or redocly completion >> ~/.zsh_profile on OSX.
-#
-_redocly_yargs_completions()
-{
-  local reply
-  local si=$IFS
-  IFS=$'
-' reply=($(COMP_CWORD="$((CURRENT-1))" COMP_LINE="$BUFFER" COMP_POINT="$CURSOR" redocly --get-yargs-completions "${words[@]}"))
-  IFS=$si
-  _describe 'values' reply
-}
-compdef _redocly_yargs_completions redocly
-###-end-redocly-completions-###
-
-
-export DOCKER_GATEWAY_HOST="`docker network inspect app-network -f '{{ (index .IPAM.Config 0).Gateway }}'`"
-
-alias laravel='~/.config/composer/vendor/bin/laravel'
-alias sail='[ -f sail ] && bash sail || bash vendor/bin/sail'
-alias docker-stop-all='docker ps --format "{{.ID}} {{.Names}}" | while read -r id name; do echo "Stopping $name..."; docker stop $id > /dev/null; done'
-
-alias pint='php ./vendor/bin/pint -v'
-alias pitn='pint'
-alias phpstan='./vendor/bin/phpstan analyse'
-alias stan='phpstan'
-alias check='pint & phpstan & wait'
-alias diff='diff --color=auto'
-
-source ~/.zsh_tokens
-
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion

@@ -1,0 +1,61 @@
+#!/usr/bin/env bash
+
+# system
+
+alias shutdown='sudo shutdown now'
+alias restart='sudo reboot'
+alias suspend='sudo pm-suspend'
+
+# colors on!
+
+alias ls='ls --color=auto'
+alias dir='dir --color=auto'
+alias vdir='vdir --color=auto'
+alias grep='grep --color=auto'
+alias fgrep='fgrep --color=auto'
+alias egrep='egrep --color=auto'
+alias diff='diff --color=auto'
+
+# ls 
+
+alias ll='ls -alF'
+alias la='ls -A'
+alias l='ls -CF'
+
+# clipboard
+
+alias pbcopy="xclip -selection c"
+alias pbpaste="xclip -selectoin c -o"
+
+# neovim
+
+alias vi="nvim"
+alias vim="nvim"
+alias view="nvim -R"
+alias vimdiff="nvim -d"
+
+# git
+
+alias gs='git status'
+alias ga='git add'
+alias gc='git commit'
+
+# docker
+
+alias dc='docker compose'
+alias dcw='docker compose watch'
+alias dockstats='docker stats $(docker ps -q)'                                  # stats on images
+
+# php development
+
+alias fixperm='sudo chown $(id -nu):www-data -R ./storage ./bootstrap/cache && sudo chmod -R g+wr ./storage ./bootstrap/cache'
+alias laravel='~/.config/composer/vendor/bin/laravel'
+alias sail='[ -f sail ] && bash sail || bash vendor/bin/sail'
+alias docker-stop-all='docker ps --format "{{.ID}} {{.Names}}" | while read -r id name; do echo "Stopping $name..."; docker stop $id > /dev/null; done'
+alias pint='php ./vendor/bin/pint -v'
+alias pitn='pint'
+alias phpstan='./vendor/bin/phpstan analyse'
+alias stan='phpstan'
+alias check='pint & phpstan & wait'
+
+
