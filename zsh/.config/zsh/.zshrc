@@ -55,14 +55,7 @@ if [ ! -f "$HOME/.fonts/JetBrainsMonoNerdFont-Regular.ttf" ]; then
     fc-cache -fv "$HOME/.fonts"
 fi
 
-# +-----+
-# | FZF |
-# +-----+
-
-#if [ $(command -v "fzf") ]; then
-    #source $ZDOTDIR/fzf.zsh
-#fi
-
+#
 # +--------------+
 # | KEY BINDINGS |
 # +--------------+
