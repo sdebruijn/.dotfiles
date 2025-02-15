@@ -2,9 +2,8 @@
 # | General |
 # +---------+
 
-export DOTFILES=~/.dotfiles
 # Load more completions
-fpath=($DOTFILES/zsh/zsh-completions/src $fpath)
+fpath=($DOTFILES/zsh-completions/src $fpath)
 
 # Should be called before compinit
 zmodload zsh/complist

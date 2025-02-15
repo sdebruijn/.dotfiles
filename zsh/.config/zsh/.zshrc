@@ -37,7 +37,7 @@ setopt HIST_VERIFY               # Do not execute immediately upon history expan
 # +------------+
 
 source $ZDOTDIR/completion.zsh
-source $DOTFILES/zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
+source $DOTFILES/zsh-autosuggestions/zsh-autosuggestions.zsh
 
 # +-------+
 # | FONTS |
@@ -76,7 +76,7 @@ bindkey '^n' history-search-forward
 # | SYNTAX HIGHLIGHTING |
 # +---------------------+
 
-source $DOTFILES/zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+source $DOTFILES/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
