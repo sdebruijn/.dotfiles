@@ -1,0 +1,48 @@
+[credential "https://github.com"]
+	helper = 
+	helper = !/usr/bin/gh auth git-credential
+[core]
+	editor = nvim
+    excludesfile = ~/.config/git/gitignore
+[diff]
+	wsErrorHighlight = all
+[user]
+	email = 15785203+sdebruijn@users.noreply.github.com
+	name = Sijmen de Bruijn
+[init]
+	defaultBranch = main
+[rerere]
+	enabled = 1
+[color]
+	ui = auto
+[pretty]
+	slog = format:%C(yellow)%h %Cred%as %Cblue%an%Cgreen%d %Creset%s
+	bw = format:%h | %as | %>(20,trunc)%d%x09%s
+[push]
+	autoSetupRemote = true
+[alias]
+	aliases = config --get-regexp alias
+	rebase-onto = "!f() { git rebase --onto main $(git merge-base \"$1\" \"$2\") \"$1\"; }; f"
+	amend = commit --amend
+	untrack = rm --cached
+	unadd = restore --staged 
+	
+	# git log
+	l1 = log -1 --pretty=slog
+	ll = log -5 --pretty=slog 
+	l5 = log -5 --pretty=slog 
+	slog = log --pretty=slog
+	slogbw = log --pretty=bw
+	glog = log --graph --pretty=slog 
+	# What should be merged
+	incoming = log --pretty=slog HEAD..@{upstream}
+	# What should be pushed
+	outgoing = log --pretty=slog @{u}..
+
+	slog = log --pretty=format:'%C(auto)%h %C(red)%as %C(blue)%aN%C(auto)%d%C(green) %s'
+	
+	# Diff last commit
+	dlc = diff --cached HEAD^
+	wdiff = diff -w --word-diff=color --ignore-space-at-eol
+
+	mm = "!git shortlog -sne"

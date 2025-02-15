@@ -1,0 +1,18 @@
+# global gitignore
+
+.idea
+.vscode
+.mailmap
+.php_cs.cache
+.ignore
+dumps/
+xdebug*
+
+# Docker
+docker-compose.override.yml
+
+# lsp files
+.lsp
+
+# PHP
+phpunit.xml.dist
