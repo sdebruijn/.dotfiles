@@ -1,6 +1,20 @@
 # .dotfiles
 
-See the Makefile for commands.
+1. Clone this repo in `~/.dotfiles`.
+```sh
+cd ~/.dotfiles
+```
+
+2. Copy `.zshenv`:
+```sh
+cp .zshenv.example ../.zshenv
+```
+
+3. For each program call `stow <program>`:
+```sh
+stow zsh
+stow nvim
+```
 
 ## Directions
 Each sub directory should contain a file tree as it would appear in $HOME.
