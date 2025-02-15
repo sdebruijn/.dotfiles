@@ -1,0 +1,4 @@
+.zshenv
+zsh/.zsh_history
+.config/nvim/lazy-lock.json
+
