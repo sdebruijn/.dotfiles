@@ -9,8 +9,13 @@ fpath=($DOTFILES/zsh-completions/src $fpath)
 zmodload zsh/complist
 
 
-autoload -U compinit; compinit
+autoload -U compinit 
 _comp_options+=(globdots) # With hidden files
+
+# Use cache for commands using cacheximate
+zstyle ':completion:*' use-cache on
+zstyle ':completion:*' cache-path "$XDG_CACHE_HOME/zsh/zcompcache"
+compinit -d "$XDG_CACHE_HOME/zsh/zcompdump-$ZSH_VERSION"
 
 
 _ls_colors="di=1;36:ln=35:so=32:pi=33:ex=31:bd=34;46:cd=34;43:su=30;41:sg=30;46:tw=30;42:ow=30;43"
@@ -22,9 +27,6 @@ _ls_colors="di=1;36:ln=35:so=32:pi=33:ex=31:bd=34;46:cd=34;43:su=30;41:sg=30;46:
 # Define completers
 zstyle ':completion:*' completer _extensions _complete _approximate
 
-# Use cache for commands using cacheximate
-zstyle ':completion:*' use-cache on
-zstyle ':completion:*' cache-path "$XDG_CACHE_HOME/zsh/.zcompcache"
 
 # Complete the alias when _expand_alias is used as a function
 zstyle ':completion:*' complete true

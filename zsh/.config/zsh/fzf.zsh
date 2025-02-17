@@ -1,9 +1,13 @@
 #!/usr/bin/env zsh
 
+# Setup fzf
+# ---------
+if [[ ! "$PATH" == */home/sijmen/.fzf/bin* ]]; then
+  PATH="${PATH:+${PATH}:}/home/sijmen/.fzf/bin"
+fi
+
 # Set up fzf key bindings and fuzzy completion
 source <(fzf --zsh)
-
-source /usr/share/fzf/key-bindings.zsh
 
 # Rebind ALT-c to CTRL-e
 bindkey -rM emacs '\ec'
@@ -15,9 +19,8 @@ bindkey -M emacs '\C-e' fzf-cd-widget
 bindkey -M vicmd '\C-e' fzf-cd-widget
 bindkey -M viins '\C-e' fzf-cd-widget
 
-source /usr/share/fzf/completion.zsh
+source $ZDOTDIR/scripts_fzf.zsh # fzf Scripts
 
-source $DOTFILES/zsh/scripts_fzf.zsh # fzf Scripts
 _fzf_comprun() {
     local command=$1
     shift
@@ -46,20 +49,3 @@ _fzf_comprun() {
   esac
 }
 
-
-choose_aws_profile() {
-  # Extract profile names from the AWS config file
-  selected_profile=$(
-    sed -n "s/\[profile \(.*\)\]/\1/gp" ~/.aws/config \
-    | fzf \
-    --height=20% \
-    --min-height=12 \
-    --margin=5%,2%,2%,5% \
-    --border=rounded \
-    --info=inline \
-    --header="Choose AWS profile" \
-  )
-  export AWS_PROFILE=$selected_profile
-  echo "Set AWS profile to '$selected_profile'"
-}
-alias awsprofile='choose_aws_profile'

@@ -1,3 +1,7 @@
+# Set up XDG direcoties
+[ -d "$XDG_STATE_HOME"/zsh ] || mkdir -p "$XDG_STATE_HOME"/zsh
+HISTFILE="$XDG_STATE_HOME"/zsh/history
+[ -d "$XDG_CACHE_HOME"/zsh ] || mkdir -p "$XDG_CACHE_HOME"/zsh
 
 # +---------+
 # | ALIASES |
@@ -71,7 +75,8 @@ bindkey '^n' history-search-forward
 
 source $DOTFILES/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+#[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+source $ZDOTDIR/fzf.zsh
 
 # +--------------+
 # | END OF ZSHRC |
