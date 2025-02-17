@@ -25,7 +25,7 @@ alias l='ls -CF'
 # clipboard
 
 alias pbcopy="xclip -selection c"
-alias pbpaste="xclip -selectoin c -o"
+alias pbpaste="xclip -selection c -o"
 
 # neovim
 
