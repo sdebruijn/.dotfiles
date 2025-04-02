@@ -91,3 +91,10 @@ eval "$(zoxide init --cmd cd zsh)"
 eval "$(starship init zsh)"
 
 
+
+# fnm
+FNM_PATH="/home/sijmen/.local/share/fnm"
+if [ -d "$FNM_PATH" ]; then
+  export PATH="/home/sijmen/.local/share/fnm:$PATH"
+  eval "$(fnm env --use-on-cd --shell zsh)"
+fi
