@@ -1,25 +1,55 @@
 [credential "https://github.com"]
 	helper = 
 	helper = !/usr/bin/gh auth git-credential
-[core]
-	editor = nvim
-    excludesfile = ~/.config/git/gitignore
-[diff]
-	wsErrorHighlight = all
 [user]
 	email = 15785203+sdebruijn@users.noreply.github.com
 	name = Sijmen de Bruijn
-[init]
-	defaultBranch = main
-[rerere]
-	enabled = 1
 [color]
 	ui = auto
 [pretty]
 	slog = format:%C(yellow)%h %Cred%as %Cblue%an%Cgreen%d %Creset%s
 	bw = format:%h | %as | %>(20,trunc)%d%x09%s
+
+# blog.gitbutler.com/how-git-core-devs-configure-git
+# Clearly makes git better
+[column]
+	ui = auto
+[branch]
+	sort = -committerdate
+[tag]
+	sort = version:refname
+[init]
+	defaultBranch = main
+[diff]
+	algorithm = histogram
+	colorMoved = plain
+	mnemonicPrefix = true
+	renames = true
 [push]
+	default = simple
 	autoSetupRemote = true
+	followTags = true
+[fetch]
+	prune = true
+	pruneTags = true
+	all = true
+
+# why not?
+[help]
+	autocorrect = prompt
+[commit]
+	verbose = true
+[rerere]
+	enabled = true
+	autoupdate = true
+[core]
+	editor = nvim
+	excludesfile = ~/.config/git/gitignore
+[rebase]
+	autoSquash = true
+	autoStash = true
+	updateRefs = true
+
 [alias]
 	aliases = config --get-regexp alias
 	rebase-onto = "!f() { git rebase --onto main $(git merge-base \"$1\" \"$2\") \"$1\"; }; f"
